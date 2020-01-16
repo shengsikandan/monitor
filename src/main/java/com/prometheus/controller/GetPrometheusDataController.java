@@ -1,5 +1,6 @@
 package com.prometheus.controller;
 
+import com.prometheus.Entry.CpuData;
 import com.prometheus.service.GetPrometheusDataService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -25,8 +26,8 @@ public class GetPrometheusDataController {
      */
     @ResponseBody
     @GetMapping("/getJson")
-    public HashMap<String,Object> getJson(){
-        HashMap<String,Object> hashMap = getPrometheusDataService.getValue();
-        return hashMap;
+    public CpuData getJson(){
+        CpuData cpuData = getPrometheusDataService.getValue();
+        return cpuData;
     }
 }
