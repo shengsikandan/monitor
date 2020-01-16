@@ -14,7 +14,7 @@ import org.springframework.stereotype.Repository;
 public class GetPrometheusDataDao {
 
     //传输json数据url
-    @Value("${prometheus.data_change_bydate_mock.url}")
+    @Value("${prometheus.cpu.url}")
     private String url;
 
     /**
