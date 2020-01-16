@@ -41,17 +41,16 @@ public class GetPrometheusDataServiceImpl implements GetPrometheusDataService {
             provinceArray = JSONArray.fromObject("["+jsonStr+"]");
         }
         List<Map<String, Object>> mapList = (List<Map<String, Object>>) provinceArray;
-        hashMap = forMapInList(mapList,hashMap);
+        hashMap = forMapInList(mapList);
         return hashMap;
     }
 
     /**
      * 进一步遍历json深层数据，并通过map集合进行返回
      * @param mapList
-     * @param hashMap
      * @return
      */
-    public HashMap<String,Object> forMapInList(List<Map<String, Object>> mapList,HashMap<String,Object> hashMap){
+    public HashMap<String,Object> forMapInList(List<Map<String, Object>> mapList){
         for (int i = 0; i < mapList.size(); i++) {
             Map<String, Object> obj = mapList.get(i);
             for (Map.Entry<String, Object> entry : obj.entrySet()) {
