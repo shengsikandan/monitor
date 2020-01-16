@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * 获取Prometheus数据信息controller层
@@ -26,8 +27,8 @@ public class GetPrometheusDataController {
      */
     @ResponseBody
     @GetMapping("/getJson")
-    public CpuData getJson(){
-        CpuData cpuData = getPrometheusDataService.getValue();
-        return cpuData;
+    public List<CpuData> getJson(){
+        List<CpuData> cpuDatas = getPrometheusDataService.getValue();
+        return cpuDatas;
     }
 }
