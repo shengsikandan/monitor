@@ -1,5 +1,6 @@
 package com.prometheus.service.impl;
 
+import com.prometheus.Entry.CpuData;
 import com.prometheus.dao.GetPrometheusDataDao;
 import com.prometheus.service.GetPrometheusDataService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,15 +17,15 @@ public class GetPrometheusDataServiceImpl implements GetPrometheusDataService {
     @Autowired
     private GetPrometheusDataDao getPrometheusDataDao;
 
-    List<Map<String, Object>> valueList = new ArrayList<Map<String, Object>>();//单个数据情况集合
+    private List<Map<String, Object>> valueList = new ArrayList<Map<String, Object>>();//单个数据情况集合
 
-    HashMap<String,Object> hashMap = new HashMap<String, Object>();//所以数据集合
+    private CpuData cpuData;
 
-    String cpu = "";//获取数据标识
+    private String cpu = "";//获取数据标识
 
     long addSeconds=0;//模拟时间增长
 
-    public HashMap<String,Object> getValue(){
+    public CpuData getValue(){
         return handleValue(getPrometheusDataDao.getValue());
     }
 
@@ -33,7 +34,7 @@ public class GetPrometheusDataServiceImpl implements GetPrometheusDataService {
      * @param jsonStr
      * @return
      */
-    public HashMap<String,Object> handleValue(String jsonStr){
+    public CpuData handleValue(String jsonStr){
         JSONArray provinceArray;
         if (jsonStr.startsWith("[")&&jsonStr.endsWith("]")){
             provinceArray = JSONArray.fromObject(jsonStr);
@@ -41,8 +42,8 @@ public class GetPrometheusDataServiceImpl implements GetPrometheusDataService {
             provinceArray = JSONArray.fromObject("["+jsonStr+"]");
         }
         List<Map<String, Object>> mapList = (List<Map<String, Object>>) provinceArray;
-        hashMap = forMapInList(mapList);
-        return hashMap;
+        cpuData = forMapInList(mapList);
+        return cpuData;
     }
 
     /**
@@ -50,7 +51,7 @@ public class GetPrometheusDataServiceImpl implements GetPrometheusDataService {
      * @param mapList
      * @return
      */
-    public HashMap<String,Object> forMapInList(List<Map<String, Object>> mapList){
+    public CpuData forMapInList(List<Map<String, Object>> mapList){
         for (int i = 0; i < mapList.size(); i++) {
             Map<String, Object> obj = mapList.get(i);
             for (Map.Entry<String, Object> entry : obj.entrySet()) {
@@ -59,17 +60,18 @@ public class GetPrometheusDataServiceImpl implements GetPrometheusDataService {
                 if (strkey1.equals("values")){
                     List<Object> list =(List<Object>) strval1;
                     valueList = forList(list,new ArrayList<Map<String, Object>>());
-                    hashMap.put(cpu,valueList);
+                    cpuData.setId(cpu);
+                    cpuData.setValueList(valueList);
                     valueList=new ArrayList<Map<String, Object>>();
                     cpu="";
-                }else if(strkey1.equals("__name__")){
+                }else if(strkey1.equals("cpu")){
                     cpu = strval1.toString();
                 }else if(strval1 instanceof JSONArray||strval1 instanceof JSONObject){
                     handleValue(strval1.toString());
                 }
             }
         }
-        return  hashMap;
+        return  cpuData;
     }
 
     /**
