@@ -19,13 +19,13 @@ public class GetPrometheusDataServiceImpl implements GetPrometheusDataService {
 
     private List<Map<String, Object>> valueList = new ArrayList<Map<String, Object>>();//单个数据情况集合
 
-    private CpuData cpuData = new CpuData();//数据实体类
+    private List<CpuData> cpuDatas = new ArrayList<CpuData>();//数据实体类集合
 
     private String cpu = "";//获取数据标识
 
     long addSeconds=0;//模拟时间增长
 
-    public CpuData getValue(){
+    public List<CpuData> getValue(){
         return handleValue(getPrometheusDataDao.getValue());
     }
 
@@ -34,7 +34,7 @@ public class GetPrometheusDataServiceImpl implements GetPrometheusDataService {
      * @param jsonStr
      * @return
      */
-    public CpuData handleValue(String jsonStr){
+    public List<CpuData> handleValue(String jsonStr){
         JSONArray provinceArray;
         if (jsonStr.startsWith("[")&&jsonStr.endsWith("]")){
             provinceArray = JSONArray.fromObject(jsonStr);
@@ -42,8 +42,8 @@ public class GetPrometheusDataServiceImpl implements GetPrometheusDataService {
             provinceArray = JSONArray.fromObject("["+jsonStr+"]");
         }
         List<Map<String, Object>> mapList = (List<Map<String, Object>>) provinceArray;
-        cpuData = forMapInList(mapList);
-        return cpuData;
+        cpuDatas = forMapInList(mapList);
+        return cpuDatas;
     }
 
     /**
@@ -51,7 +51,7 @@ public class GetPrometheusDataServiceImpl implements GetPrometheusDataService {
      * @param mapList
      * @return
      */
-    public CpuData forMapInList(List<Map<String, Object>> mapList){
+    public List<CpuData> forMapInList(List<Map<String, Object>> mapList){
         for (int i = 0; i < mapList.size(); i++) {
             Map<String, Object> obj = mapList.get(i);
             for (Map.Entry<String, Object> entry : obj.entrySet()) {
@@ -60,8 +60,10 @@ public class GetPrometheusDataServiceImpl implements GetPrometheusDataService {
                 if (strkey1.equals("values")){
                     List<Object> list =(List<Object>) strval1;
                     valueList = forList(list,new ArrayList<Map<String, Object>>());
+                    CpuData cpuData = new CpuData();
                     cpuData.setId(cpu);
                     cpuData.setValueList(valueList);
+                    cpuDatas.add(cpuData);
                     valueList=new ArrayList<Map<String, Object>>();
                     cpu="";
                 }else if(strkey1.equals("cpu")){
@@ -71,7 +73,7 @@ public class GetPrometheusDataServiceImpl implements GetPrometheusDataService {
                 }
             }
         }
-        return  cpuData;
+        return  cpuDatas;
     }
 
     /**
