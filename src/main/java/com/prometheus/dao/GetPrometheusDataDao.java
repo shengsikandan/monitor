@@ -37,7 +37,7 @@ import java.util.*;
 @PropertySource("classpath:entry.properties")
 public class GetPrometheusDataDao {
 
-    @Value("prometheus.data_change_bydate_mock.url")
+    @Value("${prometheus.data_change_bydate_mock.url}")
     private String url;
     // utf-8字符编码
     public static final String CHARSET_UTF_8 = "utf-8";
