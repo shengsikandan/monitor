@@ -25,16 +25,15 @@ public class GetPrometheusDataServiceImpl implements GetPrometheusDataService {
     long addSeconds=0;//模拟时间增长
 
     public HashMap<String,Object> getValue(){
-        return handleValue(getPrometheusDataDao.getValue(),hashMap);
+        return handleValue(getPrometheusDataDao.getValue());
     }
 
     /**
      * 处理json数据
      * @param jsonStr
-     * @param hashMap
      * @return
      */
-    public HashMap<String,Object> handleValue(String jsonStr,HashMap<String,Object> hashMap){
+    public HashMap<String,Object> handleValue(String jsonStr){
         JSONArray provinceArray;
         if (jsonStr.startsWith("[")&&jsonStr.endsWith("]")){
             provinceArray = JSONArray.fromObject(jsonStr);
@@ -67,7 +66,7 @@ public class GetPrometheusDataServiceImpl implements GetPrometheusDataService {
                 }else if(strkey1.equals("__name__")){
                     cpu = strval1.toString();
                 }else if(strval1 instanceof JSONArray||strval1 instanceof JSONObject){
-                    handleValue(strval1.toString(),hashMap);
+                    handleValue(strval1.toString());
                 }
             }
         }
