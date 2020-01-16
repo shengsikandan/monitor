@@ -1,5 +1,7 @@
 package com.prometheus.service;
 
+import com.prometheus.Entry.CpuData;
+
 import java.util.HashMap;
 
 /**
@@ -11,5 +13,5 @@ public interface GetPrometheusDataService {
      * 获取具体的json数据，并对数据进行相应的处理后进行返回
      * @return
      */
-    HashMap<String,Object> getValue();
+    CpuData getValue();
 }
