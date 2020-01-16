@@ -27,6 +27,7 @@ public class GetPrometheusDataServiceImpl implements GetPrometheusDataService {
 
     public List<CpuData> getValue(){
         cpuDatas.clear();
+        addSeconds=0;
         return handleValue(getPrometheusDataDao.getValue());
     }
 
@@ -90,11 +91,11 @@ public class GetPrometheusDataServiceImpl implements GetPrometheusDataService {
                 List<Object> objectList =(List<Object>) object;
                 forList(objectList,valueList);
             }else if(object instanceof Double){
-                addSeconds=addSeconds+30;
                 Double value = (Double) object;
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                String dataStr = sdf.format(new Date(Long.valueOf(value.longValue()+addSeconds)*1000));
+                String dataStr = sdf.format(new Date(Long.valueOf(new Date().getTime()-addSeconds)));
                 hashMap.put("date",dataStr);
+                addSeconds=addSeconds+30000;
             }else if (object instanceof String){
                 hashMap.put("fluctuation",(int)(Math.random()*100));
                 valueList.add(hashMap);
