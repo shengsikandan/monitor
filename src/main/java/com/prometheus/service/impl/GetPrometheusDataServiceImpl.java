@@ -26,6 +26,7 @@ public class GetPrometheusDataServiceImpl implements GetPrometheusDataService {
     long addSeconds=0;//模拟时间增长
 
     public List<CpuData> getValue(){
+        cpuDatas.clear();
         return handleValue(getPrometheusDataDao.getValue());
     }
 
