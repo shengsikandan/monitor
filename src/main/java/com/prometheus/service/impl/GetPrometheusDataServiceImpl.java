@@ -17,14 +17,23 @@ public class GetPrometheusDataServiceImpl implements GetPrometheusDataService {
     private GetPrometheusDataDao getPrometheusDataDao;
 
     List<Map<String, Object>> valueList = new ArrayList<Map<String, Object>>();//单个数据情况集合
+
     HashMap<String,Object> hashMap = new HashMap<String, Object>();//所以数据集合
+
     String cpu = "";//获取数据标识
+
     long addSeconds=0;//模拟时间增长
 
     public HashMap<String,Object> getValue(){
         return handleValue(getPrometheusDataDao.getValue(),hashMap);
     }
 
+    /**
+     * 处理json数据
+     * @param jsonStr
+     * @param hashMap
+     * @return
+     */
     public HashMap<String,Object> handleValue(String jsonStr,HashMap<String,Object> hashMap){
         JSONArray provinceArray;
         if (jsonStr.startsWith("[")&&jsonStr.endsWith("]")){
@@ -37,6 +46,12 @@ public class GetPrometheusDataServiceImpl implements GetPrometheusDataService {
         return hashMap;
     }
 
+    /**
+     * 进一步遍历json深层数据，并通过map集合进行返回
+     * @param mapList
+     * @param hashMap
+     * @return
+     */
     public HashMap<String,Object> forMapInList(List<Map<String, Object>> mapList,HashMap<String,Object> hashMap){
         for (int i = 0; i < mapList.size(); i++) {
             Map<String, Object> obj = mapList.get(i);
@@ -59,6 +74,12 @@ public class GetPrometheusDataServiceImpl implements GetPrometheusDataService {
         return  hashMap;
     }
 
+    /**
+     * 遍历key为Values的数组值，并通过list集合的方式进行返回
+     * @param list
+     * @param valueList
+     * @return
+     */
     public List<Map<String,Object>> forList(List<Object> list,List<Map<String,Object>> valueList){
         HashMap<String,Object> hashMap = new HashMap<String, Object>();
         for (Object object:list) {
