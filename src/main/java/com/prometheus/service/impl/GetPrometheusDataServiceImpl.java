@@ -19,7 +19,7 @@ public class GetPrometheusDataServiceImpl implements GetPrometheusDataService {
 
     private List<Map<String, Object>> valueList = new ArrayList<Map<String, Object>>();//单个数据情况集合
 
-    private CpuData cpuData;
+    private CpuData cpuData = new CpuData();//数据实体类
 
     private String cpu = "";//获取数据标识
 
