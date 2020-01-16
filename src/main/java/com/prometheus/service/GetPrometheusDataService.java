@@ -2,7 +2,6 @@ package com.prometheus.service;
 
 import com.prometheus.Entry.CpuData;
 
-import java.util.HashMap;
 import java.util.List;
 
 /**
