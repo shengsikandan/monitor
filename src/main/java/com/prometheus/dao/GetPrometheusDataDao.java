@@ -22,6 +22,8 @@ import org.apache.http.impl.client.HttpClients;
 import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
 import org.apache.http.ssl.SSLContextBuilder;
 import org.apache.http.util.EntityUtils;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Repository;
 
 import java.io.*;
@@ -32,7 +34,11 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Repository
+@PropertySource("classpath:entry.properties")
 public class GetPrometheusDataDao {
+
+    @Value("prometheus.data_change_bydate_mock.url")
+    private String url;
     // utf-8字符编码
     public static final String CHARSET_UTF_8 = "utf-8";
 
@@ -42,22 +48,7 @@ public class GetPrometheusDataDao {
     // 请求配置
     private static RequestConfig requestConfig;
     public String getValue(){
-        String tempdata="";
-        try {
-            String basePath =GetPrometheusDataDao.class.getClassLoader().getResource("entry.properties").getPath();
-            String url;
-            InputStream in = new BufferedInputStream(new FileInputStream(new File(basePath)));
-            Properties prop = new Properties();
-
-            prop.load(in);
-
-            url = prop.getProperty("prometheus.data_change_bydate_mock.url");
-            tempdata = HttpGet(url);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        String tempdata=HttpGet(url);
         return  tempdata;
     }
 
